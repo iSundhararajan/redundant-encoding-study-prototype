@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redundant Encoding Study Prototype</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <main class="app">
+      <div class="topbar">
+        <div class="title-wrap">
+          <h1>Redundant Encoding Study Prototype</h1>
+          <p>One task at a time. Please answer based only on the visualization currently shown.</p>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label" id="progressLabel">Welcome</div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+      </div>
+
+      <section class="screen active" id="screen-intro">
+        <div class="stack">
+          <div class="card stack">
+            <div>
+              <h2>Study Information and Consent</h2>
+              <p class="muted">
+                This prototype evaluates how different map encodings affect interpretation.
+                Participation is voluntary. You may stop at any time.
+              </p>
+            </div>
+
+            <div class="stack">
+              <div>
+                <label for="participantId">Participant ID</label>
+                <input id="participantId" type="text" readonly />
+              </div>
+
+              <div>
+                <label for="age">Age</label>
+                <input id="age" type="number" placeholder="e.g., 22"/>
+              </div>
+
+              <div>
+                <label for="major">Major / Field</label>
+                <input id="major" type="text" placeholder="e.g., Computer Science" />
+              </div>
+
+              <div>
+                <label for="vizExperience">How would you rate your experience with data visualizations? (1–5)</label>
+                <select id="vizExperience">
+                  <option value="">Select one</option>
+                  <option value="1">1 - No experience</option>
+                  <option value="2">2</option>
+                  <option value="3">3 - Some experience</option>
+                  <option value="4">4</option>
+                  <option value="5">5 - Very experienced</option>
+                </select>
+              </div>
+
+              <label class="option consent-option">
+                <input id="consent" type="checkbox" />
+                I consent to participating in this study.
+              </label>
+            </div>
+
+            <div class="alert error" id="introError">
+              Please complete the visualization experience and consent fields before continuing. Participant ID is auto-generated.
+            </div>
+
+            <div class="nav">
+              <div></div>
+              <button class="btn-primary" id="startBtn">Begin Study</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-task">
+        <div class="stack">
+          <div class="condition-badge" id="conditionBadge"></div>
+
+          <div class="viz-card">
+            <div class="viz-header">
+              <span class="viz-title">Interactive Visualization</span>
+              <span class="viz-note">Please do not switch tabs or go back to earlier tasks.</span>
+            </div>
+
+              <p class="muted" style="margin-bottom: 10px;">
+                Each question is independent. Please focus only on the current map.
+              </p>
+
+            <div id="tableauVizContainer" class="tableau-container"></div>
+          </div>
+
+          <div class="card stack">
+            <div>
+              <h2 class="question-title" id="questionText"></h2>
+              <p class="muted" id="taskMeta"></p>
+            </div>
+
+            <div class="stack">
+              <fieldset class="radio-fieldset">
+                <legend>Answer</legend>
+                <div class="options" id="answerOptions"></div>
+              </fieldset>
+
+              <fieldset class="radio-fieldset">
+                <legend>How confident are you in your answer? (1 = Not confident at all, 5 = Extremely confident)</legend>
+                <div class="likert-grid" id="confidenceOptions"></div>
+              </fieldset>
+            </div>
+
+            <div class="alert error" id="taskError">
+              Please select both an answer and a confidence rating before continuing.
+            </div>
+
+            <div class="nav">
+              <button class="btn-secondary" id="prevBtn">Back</button>
+              <button class="btn-primary" id="nextBtn">Next</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-finish">
+        <div class="stack">
+          <div class="card stack">
+            <div>
+              <h2>Final Feedback</h2>
+              <p class="muted">
+                Thanks for completing the study. Please answer the final comparison questions below.
+              </p>
+            </div>
+
+            <div class="stack">
+              <div>
+                <label for="feltEasiest">Which condition felt easiest?</label>
+                <select id="feltEasiest">
+                  <option value="">Select one</option>
+                  <option value="Color-only">Color-only</option>
+                  <option value="Color + Size">Color + Size</option>
+                  <option value="Color + Shape">Color + Shape</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="mostClear">Which map was easiest to understand?</label>
+                <select id="mostClear">
+                  <option value="">Select one</option>
+                  <option value="Color-only">Color-only</option>
+                  <option value="Color + Size">Color + Size</option>
+                  <option value="Color + Shape">Color + Shape</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="mostCluttered">Which condition felt most cluttered?</label>
+                <select id="mostCluttered">
+                  <option value="">Select one</option>
+                  <option value="Color-only">Color-only</option>
+                  <option value="Color + Size">Color + Size</option>
+                  <option value="Color + Shape">Color + Shape</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="openComment">Additional comments</label>
+                <textarea id="openComment" placeholder="Anything else you noticed?"></textarea>
+              </div>
+            </div>
+
+            <div class="alert error" id="finishError">
+              Please complete the three comparison questions before submitting.
+            </div>
+            <div class="alert success" id="finishSuccess">
+              Responses captured. You can download the results JSON below for now, or connect a backend later.
+            </div>
+
+            <div class="nav">
+              <button class="btn-secondary" id="finishBackBtn">Back</button>
+              <div class="button-group">
+                <button class="btn-secondary" id="downloadBtn">Download Responses</button>
+                <button class="btn-primary" id="submitBtn">Submit</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+
+</html>
+
+
+
+
